@@ -24,6 +24,7 @@ public class Main {
 
             System.out.println(prog);
             System.out.println("hiiii");
+            System.out.println("hii");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
