@@ -7,11 +7,11 @@ import Gremmers.functions.Functions;
 
 public class Classes extends AST{
 
-    private ExtendsClass extendsClass;
+    public ExtendsClass extendsClass;
 
-    private AbstractStatment abstractStatment;
+    public AbstractStatment abstractStatment;
 
-    private ClassStatement classStatement;
+    public ClassStatement classStatement;
 
 
     public void setExtendsClass(ExtendsClass extendsClass){

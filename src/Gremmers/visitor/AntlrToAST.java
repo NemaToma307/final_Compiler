@@ -1,34 +1,31 @@
 package Gremmers.visitor;
 
 import Gremmers.AST;
-import Gremmers.array.FloatArray;
-import Gremmers.array.IntArray;
-import Gremmers.array.StringArray;
+import Gremmers.array.*;
 import Gremmers.classes.AbstractStatment;
 import Gremmers.classes.ClassStatement;
 import Gremmers.classes.ExtendsClass;
-import Gremmers.expr.Addition;
-import Gremmers.expr.Division;
-import Gremmers.expr.Multiplication;
-import Gremmers.expr.Subtraction;
+import Gremmers.expr.*;
 import Gremmers.functions.Functions;
-import Gremmers.prog.Body;
-import Gremmers.prog.Classes;
-import Gremmers.prog.Element;
-import Gremmers.prog.Program;
-import Gremmers.var.Variable;
-import Gremmers.var.varVariable;
+import Gremmers.prog.*;
+import Gremmers.var.*;
+import Gremmers.var.Double;
+import Gremmers.var.Float;
+import Gremmers.var.Initial.Initial;
+import Gremmers.var.Initial.varVariable;
+import Gremmers.var.Initial.varVariableEmp;
+import Gremmers.var.Initial.varVariableExpr;
 import syntax.projectParserBaseVisitor;
 import org.antlr.v4.runtime.Token;
 import syntax.projectParser;
-import Gremmers.var.Float;
-import Gremmers.var.Double;
-import Gremmers.var.Number;
+
+import java.lang.Integer;
+
 public class AntlrToAST extends projectParserBaseVisitor<AST> {
 
     @Override
-    public Program visitProg(projectParser.ProgContext ctx) {
-        Program pp = new Program();
+    public Prog visitProg(projectParser.ProgContext ctx) {
+        Prog pp = new Prog();
         for(int i = 0 ; i< ctx.element().size() ;i++){
             pp.getElements().add(visitElement(ctx.element(i)));
         }
@@ -58,371 +55,441 @@ public class AntlrToAST extends projectParserBaseVisitor<AST> {
     }
 
     @Override
-    public AST visitFloat_f(projectParser.Float_fContext ctx) {
+    public Float visitFloat_f(projectParser.Float_fContext ctx) {
         Float float_p = new Float();
-        float_p.setFLOAT(ctx.NUM_FLOAT().toString().trim());
+        float_p.setFLOAT(ctx.NUM_FLOAT().toString());
         return float_p;
     }
 
     @Override
-    public AST visitInt_i(projectParser.Int_iContext ctx) {
-        return super.visitInt_i(ctx);
+    public IntI visitInt_i(projectParser.Int_iContext ctx) {
+        IntI int_p = new IntI();
+        int_p.setIntt(ctx.NUM().toString());
+        return int_p;
     }
 
     @Override
-    public AST visitDouble_d(projectParser.Double_dContext ctx) {
+    public Double visitDouble_d(projectParser.Double_dContext ctx) {
         Double double_p = new Double();
-        double_p.setDouble(ctx.NUM_DOUBLE().toString().trim());
+        double_p.setDouble(ctx.NUM_DOUBLE().toString());
         return double_p;
     }
 
     @Override
-    public AST visitArrayType(projectParser.ArrayTypeContext ctx) {
+    public ArrayType visitArrayType(projectParser.ArrayTypeContext ctx) {
+        ArrayType a = new ArrayType();
         if(ctx.array_var() != null){
-
+            a.setArrayVar(visitArray_var(ctx.array_var()));
         }
-        return
-    }
-
-    @Override
-    public AST visitArray_var(projectParser.Array_varContext ctx) {
-        return super.visitArray_var(ctx);
-    }
-
-    @Override
-    public AST visitArray_int(projectParser.Array_intContext ctx) {
-        IntArray intArray = new IntArray();
-        for(int i=0; i<ctx.NUM().size();i++){
-            intArray.addChild(Integer.parseInt(ctx.NUM().get(i).getText()));
+        if(ctx.array_int() != null){
+            a.setArrayInt(visitArray_int(ctx.array_int()));
         }
-        return intArray;
-    }
-
-    @Override
-    public AST visitArray_string(projectParser.Array_stringContext ctx) {
-        StringArray stringArray = new StringArray();
-        for(int i=0; i<ctx.ID().size();i++){
-            stringArray.addChild(ctx.ID().get(i).getText());
+        if(ctx.array_string() != null){
+            a.setArrayString(visitArray_string(ctx.array_string()));
         }
-        return stringArray;
-    }
-
-    @Override
-    public AST visitArray_float(projectParser.Array_floatContext ctx) {
-        FloatArray floatArray = new FloatArray();
-        for(int i=0; i<ctx.arrayFLOAT();i++){
-            floatArray.addChild(ctx.arrayFLOAT().get(i).getText());
+        if(ctx.array_float() != null){
+            a.setArrayfloat(visitArray_float(ctx.array_float()));
         }
-        return floatArray;
+        return a;
     }
 
     @Override
-    public AST visitArraybody(projectParser.ArraybodyContext ctx) {
+    public ArrayVar visitArray_var(projectParser.Array_varContext ctx) {
+
+    }
+
+    @Override
+    public ArrayInt visitArray_int(projectParser.Array_intContext ctx) {
+
+    }
+
+    @Override
+    public ArrayString visitArray_string(projectParser.Array_stringContext ctx) {
+
+    }
+
+    @Override
+    public ArrayFloat visitArray_float(projectParser.Array_floatContext ctx) {
+
+    }
+
+    @Override
+    public ArrayBody visitArraybody(projectParser.ArraybodyContext ctx) {
+        ArrayBody aa = new ArrayBody();
         if(ctx.arrayINT() != null){
-
+            aa.setArrayVarInt(visitArrayINT(ctx.arrayINT()));
         }
-        return
+        if(ctx.arraySTRING() != null){
+            aa.setArrayVarString(visitArraySTRING(ctx.arraySTRING()));
+        }
+        if(ctx.arrayFLOAT() != null){
+            aa.setArrayVarFloat(visitArrayFLOAT(ctx.arrayFLOAT()));
+        }
+        return aa;
     }
 
     @Override
-    public AST visitArrayINT(projectParser.ArrayINTContext ctx) {
-        return super.visitArrayINT(ctx);
+    public ArrayVarInt visitArrayINT(projectParser.ArrayINTContext ctx) {
+
     }
 
     @Override
-    public AST visitArraySTRING(projectParser.ArraySTRINGContext ctx) {
-        return super.visitArraySTRING(ctx);
+    public ArrayVarString visitArraySTRING(projectParser.ArraySTRINGContext ctx) {
+
     }
 
     @Override
-    public AST visitArrayFLOAT(projectParser.ArrayFLOATContext ctx) {
-        return super.visitArrayFLOAT(ctx);
+    public ArrayVarFloat visitArrayFLOAT(projectParser.ArrayFLOATContext ctx) {
+
+
     }
 
     @Override
-    public AST visitInitial(projectParser.InitialContext ctx) {
-        return super.visitInitial(ctx);
+    public Initial visitInitial(projectParser.InitialContext ctx) {
+        Initial in = new Initial();
+        if(ctx.var_Variable() != null){
+            in.setVarvariable(visitVar_Variable(ctx.var_Variable()));
+        }
+        if(ctx.var_Variable_expr() != null){
+            in.setVarvariableexpr(visitVar_Variable_expr(ctx.var_Variable_expr()));
+        }
+        if(ctx.var_Variable_emp() != null){
+            in.setVarvariableemp(visitVar_Variable_emp(ctx.var_Variable_emp()));
+        }
+        if(ctx.varVariable_INPUT_D_Q_N() != null){
+            in.setVarvariable(visitVarVariable_INPUT_D_Q_N(ctx.varVariable_INPUT_D_Q_N()));
+        }
+        if(ctx.varVariable_INPUT_D_Q_I() != null){
+            in.setVarvariable(visitVarVariable_INPUT_D_Q_I(ctx.varVariable_INPUT_D_Q_I()));
+        }
+        if(ctx.const_Variable() != null){
+            in.setVarvariable(visitConst_Variable(ctx.const_Variable()));
+        }
+        if(ctx.const_Variable_expr() != null){
+            in.setVarvariableexpr(visitConst_Variable_expr(ctx.const_Variable_expr()));
+        }
+        if(ctx.const_Variable_emp() != null){
+            in.setVarvariableemp(visitConst_Variable_emp(ctx.const_Variable_emp()));
+        }
+        if(ctx.const_Variable_INPUT_D_Q_N() != null){
+            in.setVarvariable(visitConst_Variable_INPUT_D_Q_N(ctx.const_Variable_INPUT_D_Q_N()));
+        }
+        if(ctx.const_Variable_INPUT_D_Q_I() != null){
+            in.setVarvariable(visitConst_Variable_INPUT_D_Q_I(ctx.const_Variable_INPUT_D_Q_I()));
+        }
+        if(ctx.dynamic_Variable() != null){
+            in.setVarvariable(visitDynamic_Variable(ctx.dynamic_Variable()));
+        }
+        if(ctx.dynamic_Variable_expr() != null){
+            in.setVarvariableexpr(visitDynamic_Variable_expr(ctx.dynamic_Variable_expr()));
+        }
+        if(ctx.dynamic_Variable_emp() != null){
+            in.setVarvariableemp(visitDynamic_Variable_emp(ctx.dynamic_Variable_emp()));
+        }
+        if(ctx.dynamic_Variable_INPUT_D_Q_N() != null){
+            in.setVarvariable(visitDynamic_Variable_INPUT_D_Q_N(ctx.dynamic_Variable_INPUT_D_Q_N()));
+        }
+        if(ctx.dynamic_Variable_INPUT_D_Q_I() != null){
+            in.setVarvariable(visitDynamic_Variable_INPUT_D_Q_I(ctx.dynamic_Variable_INPUT_D_Q_I()));
+        }
+        if(ctx.final_Variable() != null){
+            in.setVarvariable(visitFinal_Variable(ctx.final_Variable()));
+        }
+        if(ctx.final_Variable_expr() != null){
+            in.setVarvariableexpr(visitFinal_Variable_expr(ctx.final_Variable_expr()));
+        }
+        if(ctx.final_Variable_emp() != null){
+            in.setVarvariableemp(visitFinal_Variable_emp(ctx.final_Variable_emp()));
+        }
+        if(ctx.final_Variable_INPUT_D_Q_N() != null){
+            in.setVarvariable(visitFinal_Variable_INPUT_D_Q_N(ctx.final_Variable_INPUT_D_Q_N()));
+        }
+        if(ctx.final_Variable_INPUT_D_Q_I() != null){
+            in.setVarvariable(visitFinal_Variable_INPUT_D_Q_I(ctx.final_Variable_INPUT_D_Q_I()));
+        }
+        if(ctx.string_Variable_INPUT_D_Q_N() != null){
+            in.setVarvariable(visitString_Variable_INPUT_D_Q_N(ctx.string_Variable_INPUT_D_Q_N()));
+        }
+        if(ctx.string_Variable_INPUT_D_Q_I() != null){
+            in.setVarvariable(visitString_Variable_INPUT_D_Q_I(ctx.string_Variable_INPUT_D_Q_I()));
+        }
+        if(ctx.string_Variable_TEXT() != null){
+            in.setVarvariable(visitString_Variable_TEXT(ctx.string_Variable_TEXT()));
+        }
+        if(ctx.int_Variable() != null){
+            in.setVarvariable(visitInt_Variable(ctx.int_Variable()));
+        }
+        if(ctx.int_Variable_expr() != null){
+            in.setVarvariableexpr(visitInt_Variable_expr(ctx.int_Variable_expr()));
+        }
+        if(ctx.int_Variable_emp() != null){
+            in.setVarvariableemp(visitInt_Variable_emp(ctx.int_Variable_emp()));
+        }
+        if(ctx.float_Variable() != null){
+            in.setVarvariable(visitFloat_Variable(ctx.float_Variable()));
+        }
+        if(ctx.double_Variable() != null){
+            in.setVarvariable(visitDouble_Variable(ctx.double_Variable()));
+        }
+        if(ctx.boolean_Variable() != null){
+            in.setVarvariable(visitBoolean_Variable(ctx.boolean_Variable()));
+        }
+        if(ctx.arrayType() != null){
+            in.setArrayType(visitArrayType(ctx.arrayType()));
+        }
+        return in;
     }
 
     @Override
-    public AST visitVar_Variable(projectParser.Var_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol();
-        int line = idToken.getLine();
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM().getText());
-        String value = ctx.NUM().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitVar_Variable(projectParser.Var_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.VAR().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM().toString());
+        return vv;
     }
 
     @Override
-    public AST visitVar_Variable_expr(projectParser.Var_Variable_exprContext ctx) {
-        return super.visitVar_Variable_expr(ctx);
+    public varVariableExpr visitVar_Variable_expr(projectParser.Var_Variable_exprContext ctx) {
+        varVariableExpr vv = new varVariableExpr();
+        vv.setVarVaiableType(ctx.VAR().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableExpr(visitExpr(ctx.expr()));
+        return vv;
     }
 
     @Override
-    public AST visitVar_Variable_emp(projectParser.Var_Variable_empContext ctx) {
-        return super.visitVar_Variable_emp(ctx);
+    public varVariableEmp visitVar_Variable_emp(projectParser.Var_Variable_empContext ctx) {
+        varVariableEmp vv = new varVariableEmp();
+        vv.setVarVaiableType(ctx.VAR().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        return vv;
     }
 
     @Override
-    public AST visitVarVariable_INPUT_D_Q_N(projectParser.VarVariable_INPUT_D_Q_NContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_N().getText());
-        String value = ctx.INPUT_D_Q_N().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitVarVariable_INPUT_D_Q_N(projectParser.VarVariable_INPUT_D_Q_NContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.VAR().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_N().toString());
+        return vv;
     }
 
     @Override
-    public AST visitVarVariable_INPUT_D_Q_I(projectParser.VarVariable_INPUT_D_Q_IContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_I().getText());
-        String value = ctx.INPUT_D_Q_I().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitVarVariable_INPUT_D_Q_I(projectParser.VarVariable_INPUT_D_Q_IContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.VAR().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_I().toString());
+        return vv;
     }
 
     @Override
-    public AST visitConst_Variable(projectParser.Const_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM().getText());
-        String value = ctx.NUM().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitConst_Variable(projectParser.Const_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.CONST().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM().toString());
+        return vv;
     }
 
     @Override
-    public AST visitConst_Variable_expr(projectParser.Const_Variable_exprContext ctx) {
-        return super.visitConst_Variable_expr(ctx);
+    public varVariableExpr visitConst_Variable_expr(projectParser.Const_Variable_exprContext ctx) {
+        varVariableExpr vv = new varVariableExpr();
+        vv.setVarVaiableType(ctx.CONST().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableExpr(visitExpr(ctx.expr()));
+        return vv;
     }
 
     @Override
-    public AST visitConst_Variable_emp(projectParser.Const_Variable_empContext ctx) {
-        return super.visitConst_Variable_emp(ctx);
+    public varVariableEmp visitConst_Variable_emp(projectParser.Const_Variable_empContext ctx) {
+        varVariableEmp vv = new varVariableEmp();
+        vv.setVarVaiableType(ctx.CONST().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        return vv;
     }
 
     @Override
-    public AST visitConst_Variable_INPUT_D_Q_N(projectParser.Const_Variable_INPUT_D_Q_NContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_N().getText());
-        String value = ctx.INPUT_D_Q_N().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitConst_Variable_INPUT_D_Q_N(projectParser.Const_Variable_INPUT_D_Q_NContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.CONST().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_N().toString());
+        return vv;
     }
 
     @Override
-    public AST visitConst_Variable_INPUT_D_Q_I(projectParser.Const_Variable_INPUT_D_Q_IContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_I().getText());
-        String value = ctx.INPUT_D_Q_I().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitConst_Variable_INPUT_D_Q_I(projectParser.Const_Variable_INPUT_D_Q_IContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.CONST().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_I().toString());
+        return vv;
     }
 
     @Override
-    public AST visitDynamic_Variable(projectParser.Dynamic_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM().getText());
-        String value = ctx.NUM().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitDynamic_Variable(projectParser.Dynamic_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.DYNAMIC().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM().toString());
+        return vv;
     }
 
     @Override
-    public AST visitDynamic_Variable_expr(projectParser.Dynamic_Variable_exprContext ctx) {
-        return super.visitDynamic_Variable_expr(ctx);
+    public varVariableExpr visitDynamic_Variable_expr(projectParser.Dynamic_Variable_exprContext ctx) {
+        varVariableExpr vv = new varVariableExpr();
+        vv.setVarVaiableType(ctx.DYNAMIC().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableExpr(visitExpr(ctx.expr()));
+        return vv;
     }
 
     @Override
-    public AST visitDynamic_Variable_emp(projectParser.Dynamic_Variable_empContext ctx) {
-        return super.visitDynamic_Variable_emp(ctx);
+    public varVariableEmp visitDynamic_Variable_emp(projectParser.Dynamic_Variable_empContext ctx) {
+        varVariableEmp vv = new varVariableEmp();
+        vv.setVarVaiableType(ctx.DYNAMIC().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        return vv;
     }
 
     @Override
-    public AST visitDynamic_Variable_INPUT_D_Q_N(projectParser.Dynamic_Variable_INPUT_D_Q_NContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_N().getText());
-        String value = ctx.INPUT_D_Q_N().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitDynamic_Variable_INPUT_D_Q_N(projectParser.Dynamic_Variable_INPUT_D_Q_NContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.DYNAMIC().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_N().toString());
+        return vv;
     }
 
     @Override
-    public AST visitDynamic_Variable_INPUT_D_Q_I(projectParser.Dynamic_Variable_INPUT_D_Q_IContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_I().getText());
-        String value = ctx.INPUT_D_Q_I().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitDynamic_Variable_INPUT_D_Q_I(projectParser.Dynamic_Variable_INPUT_D_Q_IContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.DYNAMIC().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_I().toString());
+        return vv;
     }
 
     @Override
-    public AST visitFinal_Variable(projectParser.Final_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM().getText());
-        String value = ctx.NUM().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitFinal_Variable(projectParser.Final_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.FINAL().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM().toString());
+        return vv;
     }
 
     @Override
-    public AST visitFinal_Variable_expr(projectParser.Final_Variable_exprContext ctx) {
-        return super.visitFinal_Variable_expr(ctx);
+    public varVariableExpr visitFinal_Variable_expr(projectParser.Final_Variable_exprContext ctx) {
+        varVariableExpr vv = new varVariableExpr();
+        vv.setVarVaiableType(ctx.FINAL().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableExpr(visitExpr(ctx.expr()));
+        return vv;
     }
 
     @Override
-    public AST visitFinal_Variable_emp(projectParser.Final_Variable_empContext ctx) {
-        return super.visitFinal_Variable_emp(ctx);
+    public varVariableEmp visitFinal_Variable_emp(projectParser.Final_Variable_empContext ctx) {
+        varVariableEmp vv = new varVariableEmp();
+        vv.setVarVaiableType(ctx.FINAL().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        return vv;
     }
 
     @Override
-    public AST visitFinal_Variable_INPUT_D_Q_N(projectParser.Final_Variable_INPUT_D_Q_NContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_N().getText());
-        String value = ctx.INPUT_D_Q_N().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitFinal_Variable_INPUT_D_Q_N(projectParser.Final_Variable_INPUT_D_Q_NContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.FINAL().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_N().toString());
+        return vv;
     }
 
     @Override
-    public AST visitFinal_Variable_INPUT_D_Q_I(projectParser.Final_Variable_INPUT_D_Q_IContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_I().getText());
-        String value = ctx.INPUT_D_Q_I().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitFinal_Variable_INPUT_D_Q_I(projectParser.Final_Variable_INPUT_D_Q_IContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.FINAL().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_I().toString());
+        return vv;
     }
 
     @Override
-    public AST visitString_Variable_INPUT_D_Q_N(projectParser.String_Variable_INPUT_D_Q_NContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_N().getText());
-        String value = ctx.INPUT_D_Q_N().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitString_Variable_INPUT_D_Q_N(projectParser.String_Variable_INPUT_D_Q_NContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.STRING().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_N().toString());
+        return vv;
     }
 
     @Override
-    public AST visitString_Variable_INPUT_D_Q_I(projectParser.String_Variable_INPUT_D_Q_IContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.INPUT_D_Q_I().getText());
-        String value = ctx.INPUT_D_Q_I().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitString_Variable_INPUT_D_Q_I(projectParser.String_Variable_INPUT_D_Q_IContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.STRING().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.INPUT_D_Q_I().toString());
+        return vv;
     }
 
     @Override
     public AST visitString_Variable_TEXT(projectParser.String_Variable_TEXTContext ctx) {
-        return super.visitString_Variable_TEXT(ctx);
+
     }
 
     @Override
-    public AST visitInt_Variable(projectParser.Int_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM().getText());
-        String value = ctx.NUM().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitInt_Variable(projectParser.Int_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.INT().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM().toString());
+        return vv;
     }
 
     @Override
-    public AST visitInt_Variable_expr(projectParser.Int_Variable_exprContext ctx) {
-        return super.visitInt_Variable_expr(ctx);
+    public varVariableExpr visitInt_Variable_expr(projectParser.Int_Variable_exprContext ctx) {
+        varVariableExpr vv = new varVariableExpr();
+        vv.setVarVaiableType(ctx.INT().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableExpr(visitExpr(ctx.expr()));
+        return vv;
     }
 
     @Override
-    public AST visitInt_Variable_emp(projectParser.Int_Variable_empContext ctx) {
-        return super.visitInt_Variable_emp(ctx);
+    public varVariableEmp visitInt_Variable_emp(projectParser.Int_Variable_empContext ctx) {
+        varVariableEmp vv = new varVariableEmp();
+        vv.setVarVaiableType(ctx.INT().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        return vv;
     }
 
     @Override
-    public AST visitFloat_Variable(projectParser.Float_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM_FLOAT().getText());
-        String value = ctx.NUM_FLOAT().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitFloat_Variable(projectParser.Float_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.FLOAT().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM_FLOAT().toString());
+        return vv;
     }
 
     @Override
-    public AST visitDouble_Variable(projectParser.Double_VariableContext ctx) {
-        Token idToken = ctx.ID().getSymbol(); //first element
-        int line = idToken.getLine(); //num of line
-        int column = idToken.getCharPositionInLine() +  1;
-
-        String id = ctx.getChild(1).getText();
-        String type = ctx.getChild(0).getText();
-//            int value = Integer.parseInt(ctx.NUM_DOUBLE().getText());
-        String value = ctx.NUM_DOUBLE().getText();
-        return new varVariable(type,id,value);
+    public varVariable visitDouble_Variable(projectParser.Double_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.DOUBLE().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM_DOUBLE().toString());
+        return vv;
     }
 
     @Override
-    public AST visitBoolean_Variable(projectParser.Boolean_VariableContext ctx) {
-        return super.visitBoolean_Variable(ctx);
+    public varVariable visitBoolean_Variable(projectParser.Boolean_VariableContext ctx) {
+        varVariable vv = new varVariable();
+        vv.setVarVaiableType(ctx.BOOLEAN().toString());
+        vv.setVarVaiableId(ctx.ID().toString());
+        vv.setVarVaiableValue(ctx.NUM_BOOL().toString());
+        return vv;
     }
 
     @Override
@@ -616,58 +683,82 @@ public class AntlrToAST extends projectParserBaseVisitor<AST> {
     }
 
     @Override
-    public AST visitExpr(projectParser.ExprContext ctx) {
-        return super.visitExpr(ctx);
+    public Expr visitExpr(projectParser.ExprContext ctx) {
+        Expr ex = new Expr();
+        if(ctx.multiplication() != null){
+            ex.setMultiplication(visitMultiplication(ctx.multiplication()));
+        }
+        if(ctx.addition() != null){
+            ex.setAddition(visitAddition(ctx.addition()));
+        }
+        if(ctx.subtraction() != null){
+            ex.setSubtraction(visitSubtraction(ctx.subtraction()));
+        }
+        if(ctx.division() != null){
+            ex.setDivision(visitDivision(ctx.division()));
+        }
+        if(ctx.identifier() != null){
+            ex.setIdentifier(visitIdentifier(ctx.identifier()));
+        }
+//        if(ctx.integer() != null){
+//            ex.setInteger(visitInteger(ctx.integer()));
+//        }////////////error
+        return ex;
     }
 
     @Override
-    public AST visitMultiplication(projectParser.MultiplicationContext ctx) {
-        AST left = visit(ctx.getChild(0));
-        AST right = visit(ctx.getChild(2));
-        return new Multiplication(left,right);
+    public Multiplication visitMultiplication(projectParser.MultiplicationContext ctx) {
+        Multiplication mm = new Multiplication();
+        mm.setNum1(ctx.getChild(0).toString());
+        mm.setM(ctx.MULTI().toString());
+        mm.setNum2(ctx.getChild(2).toString());
+        return mm;
     }
 
     @Override
-    public AST visitAddition(projectParser.AdditionContext ctx) {
-        AST left = visit(ctx.getChild(0));
-        AST right = visit(ctx.getChild(2));
-        return new Addition(left,right);
+    public Addition visitAddition(projectParser.AdditionContext ctx) {
+        Addition mm = new Addition();
+        mm.setNum1(ctx.getChild(0).toString());
+        mm.setM(ctx.PLUS().toString());
+        mm.setNum2(ctx.getChild(2).toString());
+        return mm;
     }
 
     @Override
-    public AST visitSubtraction(projectParser.SubtractionContext ctx) {
-        AST left = visit(ctx.getChild(0));
-        AST right = visit(ctx.getChild(2));
-        return new Subtraction(left,right);
+    public Subtraction visitSubtraction(projectParser.SubtractionContext ctx) {
+        Subtraction mm = new Subtraction();
+        mm.setNum1(ctx.getChild(0).toString());
+        mm.setM(ctx.MINUS().toString());
+        mm.setNum2(ctx.getChild(2).toString());
+        return mm;
     }
 
     @Override
-    public AST visitDivision(projectParser.DivisionContext ctx) {
-        AST left = visit(ctx.getChild(0));
-        AST right = visit(ctx.getChild(2));
-        return new Division(left,right);
+    public Division visitDivision(projectParser.DivisionContext ctx) {
+        Division mm = new Division();
+        mm.setNum1(ctx.getChild(0).toString());
+        mm.setM(ctx.DIVIDE().toString());
+        mm.setNum2(ctx.getChild(2).toString());
+        return mm;
     }
 
     @Override
-    public AST visitIdentifier(projectParser.IdentifierContext ctx) {
-        Token idtoken = ctx.ID().getSymbol();
-        int line = idtoken.getLine();
-        int column = idtoken.getCharPositionInLine() + 1 ;
-
-        String id = ctx.getChild(0).getText();
-        return new Variable(id);
+    public Identifier visitIdentifier(projectParser.IdentifierContext ctx) {
+        Identifier ii = new Identifier();
+        ii.setIdentifier(ctx.ID().toString());
+        return ii;
     }
 
     @Override
-    public AST visitInteger(projectParser.IntegerContext ctx) {
-        String numText = ctx.getChild(0).getText();
-        int num = Integer.parseInt(numText);
-        return new Number(num);
+    public IntegerII visitInteger(projectParser.IntegerContext ctx) {
+        IntegerII ii = new IntegerII();
+        ii.setIntegerII(ctx.NUM().toString());
+        return ii;
     }
 
     @Override
     public Functions visitFunctionStatement(projectParser.FunctionStatementContext ctx) {
-        return super.visitFunctionStatement(ctx);
+
     }
 
     @Override
@@ -747,17 +838,17 @@ public class AntlrToAST extends projectParserBaseVisitor<AST> {
 
     @Override
     public ClassStatement visitClassstatement(projectParser.ClassstatementContext ctx) {
-        return super.visitClassstatement(ctx);
+
     }
 
     @Override
     public AbstractStatment visitAbstractstatment(projectParser.AbstractstatmentContext ctx) {
-        return super.visitAbstractstatment(ctx);
+
     }
 
     @Override
     public ExtendsClass visitExtendsClass(projectParser.ExtendsClassContext ctx) {
-        return super.visitExtendsClass(ctx);
+
     }
 
     @Override
@@ -1000,3 +1091,4 @@ public class AntlrToAST extends projectParserBaseVisitor<AST> {
         return super.visitInputclass(ctx);
     }
 }
+

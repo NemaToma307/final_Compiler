@@ -2,7 +2,7 @@ package Gremmers.prog;
 import Gremmers.AST;
 
 public class Element extends AST{
-    private Body body;
+    public Body body;
 
     public Body getBody(){
         return body;

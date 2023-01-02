@@ -222,7 +222,7 @@ expr : multiplication
      | subtraction
      | division
      | identifier
-     | integer
+     | integer           //////error
      ;
 
 multiplication : NUM MULTI NUM SEMECOLON;
@@ -230,7 +230,7 @@ addition : NUM PLUS NUM SEMECOLON ;
 subtraction : NUM MINUS NUM SEMECOLON;
 division : NUM DIVIDE NUM SEMECOLON;
 identifier : ID SEMECOLON ;
-integer : NUM SEMECOLON;
+integer : NUM SEMECOLON;     //////////error
 
 
 

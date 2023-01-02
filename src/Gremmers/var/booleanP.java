@@ -4,9 +4,9 @@ import Gremmers.AST;
 
 public class booleanP extends AST {
 
-    private String TRUE;
+    public String TRUE;
 
-    private String FALSE;
+    public String FALSE;
 
     public String getTRUE() {
         return TRUE;

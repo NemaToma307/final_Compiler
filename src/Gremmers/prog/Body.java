@@ -3,8 +3,8 @@ import Gremmers.AST;
 import Gremmers.functions.Functions;
 
 public class Body extends AST{
-    private Classes classes;
-    private Functions functions;
+    public Classes classes;
+    public Functions functions;
 
 
     public void setClasses(Classes classes){
