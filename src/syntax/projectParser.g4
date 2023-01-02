@@ -303,6 +303,7 @@ extendsClass : extends_ClassStatment_Withinput
 extends_ClassStatment_Withinput : CLASS ID EXTENDS ID  CURLELEFT  inputclass+  CURLERIGHT ;
 
 extends_ClassStatment_Withoutinput : CLASS ID EXTENDS ID  CURLELEFT         CURLERIGHT ;
+
 extends_ClassStateFull : CLASS ID EXTENDS STATEFULLWIDGET CURLELEFT OVERRIDE BUILD_WIDGET CURLELEFT
                           RETURN SCAFFOLD HLEFT  BODY TOWPOINT  flutterWidget+ HRIGHT CURLERIGHT CURLERIGHT  ;
 

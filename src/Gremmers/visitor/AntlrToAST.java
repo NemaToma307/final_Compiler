@@ -828,7 +828,7 @@ public class AntlrToAST extends projectParserBaseVisitor<AST> {
             clas.setClassStatement(visitClassstatement(ctx.classstatement()));
         }
         if(ctx.abstractstatment() != null){
-           clas.setAbstractStatment(visitAbstractstatment(ctx.abstractstatment()));
+            clas.setAbstractStatment(visitAbstractstatment(ctx.abstractstatment()));
         }
         if(ctx.extendsClass() != null){
             clas.setExtendsClass(visitExtendsClass(ctx.extendsClass()));
