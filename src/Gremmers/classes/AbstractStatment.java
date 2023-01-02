@@ -5,6 +5,7 @@ import Gremmers.AST;
 public class AbstractStatment extends AST {
     public String abstr;
     public String clas;
+
     public  String id;
 
     public void setAbstr(String abstr){
@@ -26,4 +27,12 @@ public class AbstractStatment extends AST {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return "AbstractStatment{" +
+                "abstr='" + abstr + '\'' +
+                ", clas='" + clas + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }
