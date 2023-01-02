@@ -266,17 +266,15 @@ class nan extends StatelessWidget {
                                   fit : BoxFit.fill,
                                  ),
                               ),
-                            ]
-                            ),
+                            ]),
                             onPressed: (){}
                           ),
-                        ]
-                      ),
+                          ]),
                 ]),
               ),
          ]
       ),
-     )
+      )
   }
 }
 

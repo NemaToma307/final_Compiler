@@ -7,19 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/Telegram Desktop/antlr-4.10.1-complete (2).jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/Telegram Desktop/antlr-4.10.1-complete.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/Telegram Desktop/antlr-4.10.1-complete (2).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

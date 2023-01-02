@@ -5,7 +5,7 @@ import Gremmers.AST;
 public class Double extends AST {
     public String dou;
 
-    //    public Double(String dou){
+//    public Double(String dou){
 //        this.dou=dou;
 //    }
     public void setDouble(String dou){
